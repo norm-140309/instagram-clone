@@ -5,13 +5,18 @@ import { FollowingComponent } from "./following/following.component";
 import { FavoritesComponent } from "./favorites/favorites.component";
 import { MyPostsComponent } from "./my-posts/my-posts.component";
 import { NgModule } from "@angular/core";
+import { SignupComponent } from "./auth/signup/signup.component";
+import { LoginComponent } from "./auth/login/login.component";
+import { RouteGuard } from "./auth/route-guard";
 
 const appRoutes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "allposts", component: AllPostsComponent },
-  { path: "following", component: FollowingComponent },
-  { path: "favorites", component: FavoritesComponent },
-  { path: "myposts", component: MyPostsComponent },
+  { path: "allposts", component: AllPostsComponent, canActivate: [RouteGuard] },
+  { path: "following", component: FollowingComponent, canActivate: [RouteGuard] },
+  { path: "favorites", component: FavoritesComponent, canActivate: [RouteGuard] },
+  { path: "myposts", component: MyPostsComponent, canActivate: [RouteGuard] },
+  { path: "signup", component: SignupComponent },
+  { path: "login", component: LoginComponent }
 ];
 
 @NgModule({

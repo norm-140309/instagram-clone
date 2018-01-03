@@ -6,10 +6,12 @@ import { AllPostsComponent } from "./all-posts/all-posts.component";
 import { FollowingComponent } from "./following/following.component";
 import { FavoritesComponent } from "./favorites/favorites.component";
 import { MyPostsComponent } from "./my-posts/my-posts.component";
-import { SigninComponent } from "./auth/signin/signin.component";
 import { SignupComponent } from "./auth/signup/signup.component";
 import { HomeComponent } from "./home/home.component";
 import { AppRoutingModule } from "./app-routing.module";
+import { LoginComponent } from "./auth/login/login.component";
+import { FormsModule } from "@angular/forms";
+import { RouteGuard } from "./auth/route-guard";
 
 
 @NgModule({
@@ -20,15 +22,17 @@ import { AppRoutingModule } from "./app-routing.module";
     FollowingComponent,
     FavoritesComponent,
     MyPostsComponent,
-    SigninComponent,
+    LoginComponent,
     SignupComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [RouteGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
