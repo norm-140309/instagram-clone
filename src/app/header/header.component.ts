@@ -9,12 +9,24 @@ import { UserService } from "../shared/user.service";
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;
+  user: any;
+
   constructor( private userService: UserService ) { }
 
   ngOnInit() {
+
+    this.userService.statusChange.subscribe( userData => {
+      if ( userData ) {
+        this.user = userData;
+      } else {
+        this.user = null;
+      }
+    });
+
     firebase.auth().onAuthStateChanged(userData => {
       if (userData && userData.emailVerified) {
         this.isLoggedIn = true;
+        this.user = this.userService.getProfile();
       } else {
         this.isLoggedIn = false;
       }
