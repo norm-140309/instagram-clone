@@ -7,4 +7,8 @@ export class FirebaseService {
     return ref.once( "value" )
       .then ( snapshot => snapshot.val() );
   }
+
+  uploadFile( file ) {
+    
+  }
 }
