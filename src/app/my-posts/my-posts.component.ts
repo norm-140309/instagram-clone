@@ -26,10 +26,11 @@ export class MyPostsComponent implements OnInit {
         .then ( data => {
           const message = "Your picture uploaded successfully.";
           this.notifier.display( "success", message, 3000 );
+          console.log("uploadData:", data);
         })
         .catch ( err => {
           this.notifier.display( "error", err, 3000 );
-        })
+        });
     }
   }
 
