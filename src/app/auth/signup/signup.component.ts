@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import * as firebase from "firebase";
+import { NotificationService } from "../../shared/notification.service";
 
 @Component({
   selector: "app-signup",
@@ -9,7 +10,7 @@ import * as firebase from "firebase";
 })
 export class SignupComponent implements OnInit {
 
-  constructor() { }
+  constructor( private notifier: NotificationService ) { }
 
   ngOnInit() {
   }
@@ -32,11 +33,11 @@ export class SignupComponent implements OnInit {
           firebase.auth().signOut();
         })
         .then ( () => {
-          alert ("Thank you for creating an account!");
+          this.notifier.display( "success", "Thank you for creating an account! You can now log in." );
         });
       })
       .catch( err => {
-        console.log("error:", err);
+        this.notifier.display( "error", err.message );
       });
   }
 

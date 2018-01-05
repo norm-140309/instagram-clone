@@ -12,6 +12,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { LoginComponent } from "./auth/login/login.component";
 import { FormsModule } from "@angular/forms";
 import { RouteGuard } from "./auth/route-guard";
+import { NotificationComponent } from "./notification/notification.component";
+import { NotificationService } from "./shared/notification.service";
 
 
 @NgModule({
@@ -25,14 +27,15 @@ import { RouteGuard } from "./auth/route-guard";
     LoginComponent,
     SignupComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule
   ],
-  providers: [RouteGuard],
+  providers: [RouteGuard, NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
