@@ -4,6 +4,7 @@ import * as firebase from "firebase";
 import { NotificationService } from "../../shared/notification.service";
 import { FirebaseService } from "../../shared/firebase.service";
 import { UserService } from "../../shared/user.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-login",
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private notifier: NotificationService,
     private firebaseservice: FirebaseService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -40,6 +42,7 @@ export class LoginComponent implements OnInit {
           this.userService.set( userDataFromDatabase );
           const message = "You have logged into your account successfully!";
           this.notifier.display( "success", message, 5000 );
+          this.router.navigate(["/allposts"]);
         }
       })
       .catch ( err => {
