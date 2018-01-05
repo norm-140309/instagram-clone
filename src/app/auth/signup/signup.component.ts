@@ -21,8 +21,12 @@ export class SignupComponent implements OnInit {
     const password = form.value.password;
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then( userData => { 
+      .then( userData => {
         userData.sendEmailVerification();
+        const message = `A verification email has been sent to ${email}.
+                          Please check your inbox and click the verification link.
+                          Once verification is complete, please login to the application.`;
+        this.notifier.display( "success", message, 7000 );
         return firebase.database().ref("users/" + userData.uid).set({
           email: email,
           uid: userData.uid,
@@ -31,13 +35,10 @@ export class SignupComponent implements OnInit {
         })
         .then( () => {
           firebase.auth().signOut();
-        })
-        .then ( () => {
-          this.notifier.display( "success", "Thank you for creating an account! You can now log in." );
         });
       })
       .catch( err => {
-        this.notifier.display( "error", err.message );
+        this.notifier.display( "error", err.message, 3000 );
       });
   }
 

@@ -9,22 +9,24 @@ import { NotificationService } from "../shared/notification.service";
 export class NotificationComponent implements OnInit {
   type: string = null;
   message: string = null;
+  duration = 3000;
 
   constructor(notifier: NotificationService) {
     notifier.emmitter.subscribe(
       data => {
         this.type = data.type;
         this.message = data.message;
-        this.reset();
+        this.duration = data.duration;
+        this.reset( this.duration );
       }
     );
   }
 
-  reset() {
+  reset( duration ) {
     setTimeout( () => {
       this.type = null;
       this.message = null;
-    }, 3000 );
+    }, this.duration );
   }
 
   ngOnInit() {

@@ -7,7 +7,7 @@ export class NotificationService {
 
   public emmitter = this.sub.asObservable();
 
-  display (type, message) {
-    this.sub.next({type, message});
+  display (type, message, duration) {
+    this.sub.next({type, message, duration});
   }
 }
