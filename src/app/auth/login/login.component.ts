@@ -3,6 +3,7 @@ import { NgForm } from "@angular/forms";
 import * as firebase from "firebase";
 import { NotificationService } from "../../shared/notification.service";
 import { FirebaseService } from "../../shared/firebase.service";
+import { UserService } from "../../shared/user.service";
 
 @Component({
   selector: "app-login",
@@ -11,7 +12,11 @@ import { FirebaseService } from "../../shared/firebase.service";
 })
 export class LoginComponent implements OnInit {
 
-  constructor( private notifier: NotificationService, private firebaseservice: FirebaseService ) { }
+  constructor(
+    private notifier: NotificationService,
+    private firebaseservice: FirebaseService,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
   }
@@ -32,7 +37,9 @@ export class LoginComponent implements OnInit {
       })
       .then ( userDataFromDatabase => {
         if ( userDataFromDatabase ) {
-          console.log( "userData:", userDataFromDatabase );
+          this.userService.set( userDataFromDatabase );
+          const message = "You have logged into your account successfully!";
+          this.notifier.display( "success", message, 5000 );
         }
       })
       .catch ( err => {
