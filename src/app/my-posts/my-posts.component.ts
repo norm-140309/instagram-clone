@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import * as firebase from "firebase";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FirebaseService } from "../shared/firebase.service";
 import { NotificationService } from "../shared/notification.service";
 
@@ -7,7 +8,9 @@ import { NotificationService } from "../shared/notification.service";
   templateUrl: "./my-posts.component.html",
   styleUrls: ["./my-posts.component.css"]
 })
-export class MyPostsComponent implements OnInit {
+export class MyPostsComponent implements OnInit, OnDestroy {
+  postList: any[] = [];
+  personalPostsRef: any;
 
   constructor(
     private firebaseservice: FirebaseService,
@@ -15,6 +18,15 @@ export class MyPostsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const uid = firebase.auth().currentUser.uid;
+    this.personalPostsRef = this.firebaseservice.getUserPostsRef(uid);
+    // Initially loads all posts under user's uid
+    this.personalPostsRef.on("child_added", data => {
+      this.postList.push({
+        key: data.key,
+        data: data.val()
+      });
+    });
   }
 
   onFileSelection ( event ) {
@@ -35,5 +47,7 @@ export class MyPostsComponent implements OnInit {
     }
   }
 
-
+  ngOnDestroy() {
+    this.personalPostsRef.off();
+  }
 }
