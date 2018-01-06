@@ -1,6 +1,10 @@
+import { UserService } from "./user.service";
 import * as firebase from "firebase";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class FirebaseService {
+  constructor( private user: UserService ) {}
 
   getUserFromDatabase(uid) {
     const ref = firebase.database().ref( "users/" + uid );
@@ -14,13 +18,13 @@ export class FirebaseService {
     for (let i = 0; i < 16; i++) {
       text += possible.charAt(Math.random() * possible.length);
     }
-    return text + "." + ext;
+    return text; // + "." + ext;
   }
 
   uploadFile( file ) {
     const origName = file.name;
     let ext = origName.split(".")[1];
-    if (ext.length != 3) { ext = "jpg" }
+    if (ext.length !== 3) { ext = "jpg"; }
     const filename = this.generateRandomName(ext);
     const fileRef = firebase.storage().ref().child("image/" + filename);
     const uploadTask = fileRef.put(file);
@@ -36,5 +40,38 @@ export class FirebaseService {
         resolve( { "filename": filename, "fileUrl": fileUrl, "fileType": fileType } );
       });
     });
+  }
+
+  handleImageUpload(data) {
+    const user = this.user.getProfile();
+    const newPersonalPostKey = firebase.database().ref().child("myposts").push().key;
+    const personalPostDetails = {
+      fileUrl: data.fileUrl,
+      name: data.filename,
+      creationDate: new Date().toString()
+    };
+
+    const allPostKey = firebase.database().ref("allposts").push().key;
+    const allPostDetails = {
+      fileUrl: data.fileUrl,
+      name: data.filename,
+      creationDate: new Date().toString(),
+      uploadedBy: user
+    };
+
+    const imageDetails = {
+      fileUrl: data.fileUrl,
+      name: data.filename,
+      creationDate: new Date().toString(),
+      uploadedBy: user,
+      favoriteCount: 0
+    };
+
+    const updates = {};
+    updates[ "/myposts/" + user.uid + "/" + newPersonalPostKey ] = personalPostDetails;
+    updates[ "/allposts/" + allPostKey ] = allPostDetails;
+    updates[ "/images/" + data.filename ] = imageDetails;
+
+    return firebase.database().ref().update(updates);
   }
 }

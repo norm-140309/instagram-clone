@@ -26,12 +26,14 @@ export class MyPostsComponent implements OnInit {
         .then ( data => {
           const message = "Your picture uploaded successfully.";
           this.notifier.display( "success", message, 3000 );
-          console.log("uploadData:", data);
+          console.log("my-posts data:", data);
+          this.firebaseservice.handleImageUpload( data );
         })
         .catch ( err => {
           this.notifier.display( "error", err, 3000 );
         });
     }
   }
+
 
 }
