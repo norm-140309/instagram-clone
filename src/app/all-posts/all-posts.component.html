@@ -11,6 +11,7 @@
           <app-post *ngFor="let post of all"
                     [imageName]="post.data.name"
                     [displayPostedBy]="true"
+                    [displayFavoritesButton]="true"
                     (favoriteClicked)="onFavoritesClicked($event)"
                     (followClicked)="onFollowClicked($event)"
           >
