@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
       if (userData && userData.emailVerified) {
         this.isLoggedIn = true;
         this.user = this.userService.getProfile();
-        this.router.navigate([ "/myposts" ]);
+        this.router.navigate([ "/allposts" ]);
       } else {
         this.isLoggedIn = false;
       }
