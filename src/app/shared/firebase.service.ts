@@ -89,4 +89,13 @@ export class FirebaseService {
 
     return firebase.database().ref().update(updates);
   }
+
+  followUser(userData) {
+    const uid = firebase.auth().currentUser.uid;
+    const updates = {};
+
+    updates[ "/follow/" + uid + "/" + userData.uid ] = true;
+
+    return firebase.database().ref().update(updates);
+  }
 }

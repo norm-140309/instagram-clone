@@ -63,7 +63,15 @@ export class AllPostsComponent implements OnInit, OnDestroy {
   }
 
   onFollowClicked(imgData) {
-
+    this.firebaseservice.followUser(imgData.uploadedBy)
+      .then( data => {
+        const message = "You are now following " + imgData.uploadedBy.name + ".";
+        this.notifier.display( "success", message, 3000 );
+      })
+      .catch( err => {
+        const message = "Error following user.";
+        this.notifier.display( "error", message, 3000 );
+      });
   }
 
   ngOnDestroy() {

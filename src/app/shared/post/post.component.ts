@@ -9,9 +9,10 @@ import * as firebase from "firebase";
 export class PostComponent implements OnInit {
   @Input() imageName: string;
   @Input() displayPostedBy = false;
-  @Input() followClicked = false;
   @Input() displayFavoritesButton = false;
   @Output() favoriteClicked = new EventEmitter<any>();
+  @Input() displayFollowButton = false;
+  @Output() followClicked = new EventEmitter<any>();
   defaultImage = "http://via.placeholder.com/150x150";
   imageData: any = {};
 
@@ -26,12 +27,17 @@ export class PostComponent implements OnInit {
         this.defaultImage = this.imageData.fileUrl;
         if ( this.imageData.uploadedBy.uid === uid ) {
           this.displayFavoritesButton = false;
+          this.displayFollowButton = false;
         }
       });
   }
 
   onFavoritesClicked() {
     this.favoriteClicked.emit(this.imageData);
+  }
+
+  onFollowClicked() {
+    this.followClicked.emit(this.imageData);
   }
 
 }
