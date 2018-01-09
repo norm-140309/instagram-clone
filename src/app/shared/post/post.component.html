@@ -1,7 +1,9 @@
 <div class="full-frame">
 
   <div class="image-section">
-   <img [src]="defaultImage">
+    <a [href]="defaultImage" data-lightbox="image" data-title="Posted by: {{imageData.uploadedBy.name}}">
+      <img [src]="defaultImage">
+    </a>
   </div>
 
   <div class="text-section">
