@@ -117,19 +117,8 @@ export class FirebaseService {
   deleteImage(imgData, key) {
     this.getKeyByName(imgData.name)
       .then( (allKey) => {
-        console.log("via Promise... allKey:", allKey);
         firebase.database().ref().update({ ["/allposts/" + allKey]: null });
       });
-
-    // const allRef = firebase.database().ref().child("allposts");
-    // allRef.orderByChild("name").equalTo(imgData.name).on("value", function(snapshot) {
-    //   let myKey = "";
-    //   // tslint:disable-next-line:forin
-    //   for (const i in snapshot.val()) {
-    //     myKey = i;
-    //   }
-    //   firebase.database().ref().update({ ["/allposts/" + myKey]: null });
-    // });
 
     const uid = firebase.auth().currentUser.uid;
     const updates = {};
