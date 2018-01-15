@@ -1,8 +1,11 @@
-const functions = require('firebase-functions');
+const functions = require("firebase-functions");
 const SlackWebhook = require("slack-webhook");
 const slack = new SlackWebhook("https://hooks.slack.com/services/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");
-const gcs = require('@google-cloud/storage')();
-const spawn = require('child-process-promise').spawn;
+const gcs = require("@google-cloud/storage")({keyFilename: "instaclone-554c3-firebase-adminsdk-487ti-2ac5708996.json"});
+const spawn = require("child-process-promise").spawn;
+const admin = require("firebase-admin");
+
+admin.initializeApp(functions.config().firebase);
 
 exports.generateThumbnail = functions.storage.object()
   .onChange(event => {
@@ -12,6 +15,9 @@ exports.generateThumbnail = functions.storage.object()
     const fileBucket = object.bucket;
     const bucket = gcs.bucket(fileBucket);
     const tempFilePath = `/tmp/${fileName}`;
+    const ref = admin.database().ref();
+    const file = bucket.file(filePath);
+    const thumbFilePath = filePath.replace(/(\/)?([^\/]*)*/, "$1thumb_$2");
 
     if (fileName.startsWith("thumb_")) {
       console.log("Already a thumbnail");
@@ -36,12 +42,27 @@ exports.generateThumbnail = functions.storage.object()
     })
     .then (() => {
       console.log("thumbnail created");
-      // match end of string that contains a slash followed by 0 or more characters that are not a slash:
-      const thumbFilePath = filePath.replace(/(\/)?([^\/]*)*/, '$1thumb_$2');
-
       return bucket.upload(tempFilePath, {
         destination: thumbFilePath
       });
+    })
+    .then (() => {
+      const thumbFile =bucket.file(thumbFilePath);
+      const config = {
+        action: "read",
+        expires: "01-01-2038"
+      }
+      return Promise.all([
+        thumbFile.getSignedUrl(config),
+        file.getSignedUrl(config)
+      ]);
+    })
+    .then(results => {
+      const thumbResult = results[0];
+      const originalResult = results[1];
+      const thumbFileUrl = thumbResult[0];
+      const fileUrl = originalResult[0];
+      return ref.child("images/" + fileName + "/thumbUrl").set(thumbFileUrl);
     })
   })
 
