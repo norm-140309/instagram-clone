@@ -27,6 +27,13 @@ export class MyPostsComponent implements OnInit, OnDestroy {
         data: data.val()
       });
     });
+    this.personalPostsRef.on("child_removed", data => {
+      for (let i = 0; i < this.postList.length; i++) {
+        if (this.postList[i].key === data.key) {
+          this.postList.splice(i, 1);
+        }
+      }
+    });
   }
 
   onFileSelection ( event ) {
@@ -38,13 +45,24 @@ export class MyPostsComponent implements OnInit, OnDestroy {
         .then ( data => {
           const message = "Your picture uploaded successfully.";
           this.notifier.display( "success", message, 3000 );
-          console.log("my-posts data:", data);
           this.firebaseservice.handleImageUpload( data );
         })
         .catch ( err => {
           this.notifier.display( "error", err, 3000 );
         });
     }
+  }
+
+  onDeleteClicked(imgData, post) {
+    this.firebaseservice.deleteImage(imgData, post.key)
+      .then( data => {
+        const message = "Your image has been deleted.";
+        this.notifier.display( "success", message, 3000 );
+      })
+      .catch( err => {
+        const message = "Error following user.";
+        this.notifier.display( "error", message, 3000 );
+      });
   }
 
   ngOnDestroy() {

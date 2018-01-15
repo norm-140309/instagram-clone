@@ -13,7 +13,10 @@ export class PostComponent implements OnInit {
   @Output() favoriteClicked = new EventEmitter<any>();
   @Input() displayFollowButton = false;
   @Output() followClicked = new EventEmitter<any>();
-  defaultImage = "http://via.placeholder.com/150x150";
+  @Input() displayDeletePost = false;
+  @Output() deleteClicked = new EventEmitter<any>();
+  defaultImage = "http://via.placeholder.com/500x500";
+  defaultThumb = "http://via.placeholder.com/150x150";
   imageData: any = {};
 
   constructor() { }
@@ -25,6 +28,7 @@ export class PostComponent implements OnInit {
       .then( snapshot => {
         this.imageData = snapshot.val();
         this.defaultImage = this.imageData.fileUrl;
+        this.defaultThumb = this.imageData.thumbUrl;
         if ( this.imageData.uploadedBy.uid === uid ) {
           this.displayFavoritesButton = false;
           this.displayFollowButton = false;
@@ -38,6 +42,10 @@ export class PostComponent implements OnInit {
 
   onFollowClicked() {
     this.followClicked.emit(this.imageData);
+  }
+
+  onDeleteClicked() {
+    this.deleteClicked.emit(this.imageData);
   }
 
 }

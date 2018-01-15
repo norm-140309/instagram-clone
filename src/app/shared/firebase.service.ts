@@ -26,7 +26,8 @@ export class FirebaseService {
     let ext = origName.split(".")[1];
     if (ext.length !== 3) { ext = "jpg"; }
     const filename = this.generateRandomName(ext);
-    const fileRef = firebase.storage().ref().child("image/" + filename);
+    // const fileRef = firebase.storage().ref().child("image/" + filename);
+    const fileRef = firebase.storage().ref().child(filename);
     const uploadTask = fileRef.put(file);
 
     return new Promise((resolve, reject) => {
@@ -45,6 +46,7 @@ export class FirebaseService {
   handleImageUpload(data) {
     const user = this.user.getProfile();
     const newPersonalPostKey = firebase.database().ref().child("myposts").push().key;
+
     const personalPostDetails = {
       fileUrl: data.fileUrl,
       name: data.filename,
@@ -98,4 +100,43 @@ export class FirebaseService {
 
     return firebase.database().ref().update(updates);
   }
+
+  getKeyByName(name) {
+    return new Promise( (resolve, reject) => {
+      const allRef = firebase.database().ref().child("allposts");
+      allRef.orderByChild("name").equalTo(name).on("value", function(snapshot) {
+        let myKey = "";
+        // tslint:disable-next-line:forin
+        for (const i in snapshot.val()) { myKey = i; }
+        resolve (myKey);
+        // resolve (Object.keys(snapshot.val())[0]);
+      });
+    });
+  }
+
+  deleteImage(imgData, key) {
+    this.getKeyByName(imgData.name)
+      .then( (allKey) => {
+        console.log("via Promise... allKey:", allKey);
+        firebase.database().ref().update({ ["/allposts/" + allKey]: null });
+      });
+
+    // const allRef = firebase.database().ref().child("allposts");
+    // allRef.orderByChild("name").equalTo(imgData.name).on("value", function(snapshot) {
+    //   let myKey = "";
+    //   // tslint:disable-next-line:forin
+    //   for (const i in snapshot.val()) {
+    //     myKey = i;
+    //   }
+    //   firebase.database().ref().update({ ["/allposts/" + myKey]: null });
+    // });
+
+    const uid = firebase.auth().currentUser.uid;
+    const updates = {};
+    updates[ "/images/" + imgData.name ] = null;
+    updates[ "/myposts/" + uid + "/" + key ] = null;
+    // updates[ "/favorites/" + uid + "/" + imgData.name ] = imgData;
+    return firebase.database().ref().update(updates);
+  }
+
 }

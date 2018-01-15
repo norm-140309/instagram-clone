@@ -1,8 +1,9 @@
 <div class="full-frame">
 
   <div class="image-section">
-    <a [href]="defaultImage" data-lightbox="image" data-title="Posted by: {{imageData.uploadedBy.name}}">
-      <img [src]="defaultImage">
+    <a [href]="defaultImage" data-lightbox="image" data-title="Posted by: {{imageData.uploadedBy?.name}}">
+      <img [src]="defaultThumb" *ngIf="defaultThumb">
+      <img [src]="defaultImage" *ngIf="!defaultThumb">
     </a>
   </div>
 
@@ -32,6 +33,12 @@
       <span (click)="onFollowClicked()">
         <span class="glyphicon glyphicon-tags"></span>
         Follow User
+      </span>
+    </div> 
+    <div class="text-section-row row5 action-row hvr-grow" *ngIf="displayDeletePost">
+      <span (click)="onDeleteClicked()">
+        <span class="glyphicon glyphicon-trash"></span>
+        Delete Image
       </span>
     </div> 
   </div>

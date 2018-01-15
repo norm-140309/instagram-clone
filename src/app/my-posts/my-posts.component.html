@@ -16,6 +16,8 @@
         <app-post *ngFor="let post of postList"
                   [imageName]="post.data.name"
                   [displayPostedBy]="false"
+                  [displayDeletePost]="true"
+                  (deleteClicked)="onDeleteClicked($event, post)"
         ></app-post>
       </div>
     </div>
