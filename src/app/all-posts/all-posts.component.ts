@@ -13,14 +13,14 @@ export class AllPostsComponent implements OnInit, OnDestroy {
   all: any = [];
   allRef: any;
   loadMoreRef: any;
-  perPage = 3;
+  perPage = 10;
   constructor(
     private firebaseservice: FirebaseService,
     private notifier: NotificationService
   ) { }
 
   ngOnInit() {
-    this.allRef = firebase.database().ref("allposts").limitToFirst(3);
+    this.allRef = firebase.database().ref("allposts").limitToFirst(this.perPage);
     this.allRef.on("child_added", data => {
       this.all.push({
         key: data.key,
@@ -36,7 +36,7 @@ export class AllPostsComponent implements OnInit, OnDestroy {
       const lastLoadedPostKey = lastLoadedPost.key;
       this.loadMoreRef =  firebase.database().ref("allposts")
                                   .startAt(null, lastLoadedPostKey)
-                                  .limitToFirst(3 + 1);
+                                  .limitToFirst(this.perPage + 1);
       this.loadMoreRef.on("child_added", data => {
         if (data.key === lastLoadedPostKey) {
           return;
