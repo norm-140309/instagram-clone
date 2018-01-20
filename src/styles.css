@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@media screen and (max-width: 640px) {
+  .centered-btns {
+    text-align: center;
+  }
+}

@@ -1,4 +1,4 @@
 lightbox.option({
-  "disableScrolling": true,
+  "disableScrolling": false,
   "alwaysShowNavOnTouchDevices": true
 });

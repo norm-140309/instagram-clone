@@ -1,27 +1,35 @@
 <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" routerLink="/">InstaClone</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/">Home</a></li>
-      <li routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/allposts">All Posts</a></li>
-      <li routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/following">Following</a></li>
-      <li routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/favorites">Favorites</a></li>
-      <li routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/myposts">My Posts</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" *ngIf="user">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript: void(0)"><span class="user-name-display">{{user.name}}</span>
-          <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="javascript:void(0)"><span class="user-title">Email: </span><span class="user-data">{{user.email}}</span></a></li>
-          <li><a href="javascript:void(0)"><span class="user-title">Uid: </span><span class="user-data">{{user.uid}}</span></a></li>
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" routerLink="/">InstaClone</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/">Home</a></li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/allposts">All Posts</a></li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/following">Following</a></li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/favorites">Favorites</a></li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="isLoggedIn"><a routerLink="/myposts">My Posts</a></li>
         </ul>
-      </li>
-      <li routerLinkActive="active" *ngIf="!isLoggedIn"><a routerLink="/signup">Signup</a></li>
-      <li routerLinkActive="active" *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
-      <li routerLinkActive="active" *ngIf="isLoggedIn" (click)="onLogout()"><a href="">Logout</a></li>
-    </ul>
-  </div>
-</nav>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown" *ngIf="user">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript: void(0)"><span class="user-name-display">{{user.name}}</span>
+              <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript:void(0)"><span class="user-title">Email: </span><span class="user-data">{{user.email}}</span></a></li>
+              <li><a href="javascript:void(0)"><span class="user-title">Uid: </span><span class="user-data">{{user.uid}}</span></a></li>
+            </ul>
+          </li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="!isLoggedIn"><a routerLink="/signup">Signup</a></li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
+          <li data-toggle="collapse" data-target="#navbar" routerLinkActive="active" *ngIf="isLoggedIn" (click)="onLogout()"><a href="">Logout</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+  </nav>
